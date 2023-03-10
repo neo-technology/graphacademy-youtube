@@ -1,0 +1,84 @@
+PROFILE MATCH (p:Person)-[:ACTED_IN]->(m)
+RETURN p.name, m.title LIMIT 100
+
+****
+
+PROFILE MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+RETURN p.name, m.title LIMIT 100
+
+****
+
+PROFILE MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+WHERE p.name = 'Eminem'
+RETURN p.name, m.title
+
+****
+
+PROFILE
+MATCH (p1:Person)-[:ACTED_IN]->(m1)
+MATCH (m2)<-[:ACTED_IN]-(p2:Person)
+WHERE p1.name = 'Tom Hanks'
+AND p2.name = 'Meg Ryan'
+AND m1 = m2
+RETURN m1.title
+
+****
+
+PROFILE MATCH (m:Movie)<--(p:Person)
+WHERE p.name = 'Clint Eastwood'
+RETURN  m.title
+
+****
+
+PROFILE MATCH (m:Movie)<-[:DIRECTED]-(p:Person)
+WHERE p.name = 'Clint Eastwood'
+RETURN  m.title
+
+****
+
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+WHERE p.name = 'Eminem'
+RETURN  m.title AS movies
+
+****
+
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie),
+(coActors:Person)-[:ACTED_IN]->(m)
+WHERE p.name = 'Eminem'
+RETURN m.title AS movie ,collect(coActors.name) AS coActors
+
+****
+
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+WHERE p.name = 'Eminem'
+MATCH (allActors:Person)-[:ACTED_IN]->(m)
+RETURN m.title AS movie, collect(allActors.name) AS allActors
+
+****
+
+PROFILE MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+WHERE p.name = 'Tom Hanks'
+RETURN m.title AS movie
+
+****
+
+PROFILE MATCH (p:Person)-[:ACTED_IN]->(m)
+WHERE p.name = 'Tom Hanks'
+RETURN m.title AS movie
+
+****
+
+MATCH (person:Person)-[]->(movie)
+WHERE person.name = 'Walt Disney'
+RETURN person, movie
+
+****
+
+MATCH p = ((person:Person)-[]->(movie))
+WHERE person.name = 'Walt Disney'
+RETURN p
+
+
+
+
+

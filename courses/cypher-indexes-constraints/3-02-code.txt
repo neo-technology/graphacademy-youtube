@@ -28,5 +28,4 @@ PROFILE MATCH (m:Movie)
 WHERE toLower(m.title) STARTS WITH "toy"
 RETURN m.title
 
-****
 

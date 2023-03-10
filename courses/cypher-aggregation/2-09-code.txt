@@ -1,0 +1,61 @@
+MATCH p = (a:Actor)-[:ACTED_IN*2]-(a2:Actor)
+WHERE
+a.name = 'Meg Ryan'
+AND all(x IN nodes(p) WHERE x.year > 1900 OR x:Actor)
+RETURN p
+
+****
+
+MATCH p = (a:Actor)-[:ACTED_IN*2]-(a2:Actor)
+WHERE
+a.name = 'Meg Ryan'
+AND all(x IN nodes(p) WHERE x.year > 2010 OR x:Actor)
+RETURN p
+
+****
+
+MATCH p = (a:Actor)-[:ACTED_IN*2]-(a2:Actor)
+WHERE
+a.name = 'Meg Ryan'
+AND all(x IN nodes(p) WHERE x.year > 1900)
+RETURN p
+
+****
+
+MATCH p = (a:Actor)-[:ACTED_IN*2]-(a2:Actor)
+WHERE
+a.name = 'Meg Ryan'
+AND any(x IN nodes(p) WHERE x.year = 2000)
+RETURN p
+
+****
+
+MATCH (m:Movie)
+WITH collect(m.title) AS Movies
+RETURN isEmpty(Movies)
+
+****
+
+MATCH (m:Movie)
+WITH collect(m.title) AS Movies
+RETURN size(Movies) = 0
+
+****
+
+MATCH p = (a:Actor)-[:ACTED_IN*2]-(a2:Actor)
+WHERE
+a.name = 'Meg Ryan'
+AND none(x IN nodes(p) WHERE x.name= 'Tom Hanks' and x:Actor)
+RETURN p
+
+****
+
+MATCH p = (a:Actor)-[:ACTED_IN*2]-(a2:Actor)
+WHERE
+a.name = 'Tom Hanks'
+AND single(x IN nodes(p) WHERE x.born.year  = a.born.year AND x:Actor)
+RETURN a.born.year, a2.born.year, a2.name
+
+
+
+

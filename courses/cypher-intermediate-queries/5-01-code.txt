@@ -1,0 +1,74 @@
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+WHERE p.name = 'Tom Hanks'
+RETURN m.title AS movies
+
+****
+
+WITH 'Tom Hanks' AS actorName
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+WHERE p.name = actorName
+RETURN m.title AS movies
+
+****
+
+WITH  'toy story' AS mt, 'Tom Hanks' AS actorName
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+WHERE p.name = actorName
+AND toLower(m.title) CONTAINS mt
+RETURN m.title AS movies
+
+****
+
+WITH  'toy story' AS mt, 'Tom Hanks' AS actorName
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+WITH m, toLower(m.title) AS movieTitle
+WHERE p.name = actorName
+AND movieTitle CONTAINS mt
+RETURN m.title AS movies, movieTitle
+
+****
+
+WITH  'Tom Hanks' AS theActor
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+WHERE p.name = theActor
+RETURN m.title AS movies LIMIT 2
+
+****
+
+WITH  'Tom Hanks' AS theActor
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+WHERE p.name = theActor
+WITH m  LIMIT 2
+// possibly do more with the two m nodes
+RETURN m.title AS movies
+
+****
+
+WITH  'Tom Hanks' AS theActor
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+WHERE p.name = theActor
+WITH m ORDER BY m.year LIMIT 5
+// possibly do more with the five m nodes in a particular order
+RETURN m.title AS movies, m.year AS yearReleased
+
+****
+
+MATCH (n:Movie)
+WHERE n.imdbRating IS NOT NULL
+AND n.poster IS NOT NULL
+WITH n {
+  .title,
+  .year,
+  .languages,
+  .plot,
+  .poster,
+  .imdbRating,
+  directors: [ (n)<-[:DIRECTED]-(d) | d { tmdbId:d.imdbId, .name } ]
+}
+ORDER BY n.imdbRating DESC LIMIT 4
+RETURN collect(n)
+
+
+
+
+

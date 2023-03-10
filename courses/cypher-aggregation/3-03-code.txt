@@ -1,0 +1,55 @@
+PROFILE MATCH (m:Movie)
+WHERE m.year = 2000
+RETURN avg(m.revenue) as AvgRevenue
+
+****
+
+WITH [1,3, null] as Nums
+UNWIND Nums AS x
+RETURN avg(x)
+
+****
+
+CALL {
+  MATCH (m:Movie) WHERE m.year = 2000
+  RETURN m ORDER BY m.imdbRating DESC LIMIT 10
+}
+MATCH  (:User)-[r:RATED]->(m)
+RETURN m.title as Movie, avg(r.rating) AS AverageRating
+
+****
+
+PROFILE MATCH (m:Movie)
+WITH avg(m.imdbVotes) as AverageVote
+MATCH (m2:Movie)
+WHERE m2.year = 2010 AND m2.imdbVotes > AverageVote
+RETURN AverageVote AS OverallAverageVote, m2.title AS Title , m2.imdbVotes AS AverageVote
+
+****
+
+MATCH (u:User {name: "Misty Williams"})-[r:RATED]->(:Movie)
+WITH u, avg(r.rating) AS average
+MATCH (u)-[r:RATED]->(m:Movie)
+WHERE r.rating > average
+RETURN average , m.title AS movie,
+r.rating as rating
+ORDER BY rating DESC
+
+****
+
+MATCH (a:Actor)
+WHERE
+a.born IS NOT NULL
+AND a.name STARTS WITH 'Tom'
+WITH count(a) AS NumActors, collect(duration.between(date(a.born), date())) AS Ages
+UNWIND Ages AS x
+WITH  NumActors, sum(x) AS TotalAges, avg(x) AS AverageAge
+RETURN  TotalAges, TotalAges/NumActors, AverageAge
+
+****
+
+PROFILE MATCH (m:Movie)
+RETURN avg(m.imdbRating), stdev(m.imdbRating), stdevP(m.imdbRating)
+
+
+

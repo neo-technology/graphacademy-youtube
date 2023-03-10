@@ -1,0 +1,52 @@
+MATCH (a:Person)-[:ACTED_IN]->(m:Movie)
+WHERE a.name = 'Tom Hanks'
+RETURN a.name AS ActorName,
+count(*) AS NumMovies
+
+****
+
+PROFILE MATCH (a:Person)-[:ACTED_IN]->(m:Movie)<-[:DIRECTED]-(d:Person)
+RETURN a.name AS ActorName,
+d.name AS DirectorName,
+count(*) AS NumMovies
+ORDER BY NumMovies DESC
+
+****
+
+PROFILE MATCH (a:Person)-[:ACTED_IN]->(m:Movie)<-[:DIRECTED]-(d:Person)
+RETURN a.name AS ActorName,
+d.name AS DirectorName,
+count(*) AS NumMovies, collect(m.title) AS Movies
+ORDER BY NumMovies DESC
+
+****
+
+MATCH (p:Person)
+RETURN count(p) , count(p.born)
+
+****
+
+PROFILE MATCH (a:Person)-[:ACTED_IN]->(m:Movie)
+WITH  a, count(*) AS NumMovies
+// can add Movies to also create the list of movies
+//, collect(m.title) AS Movies
+WHERE NumMovies = 2
+RETURN a.name AS Actor
+//, Movies
+
+****
+
+MATCH (p:Person {name: 'Elvis Presley'})-[]-(m:Movie)-[]-(a:Actor)
+RETURN count(*), count(m), count (a)
+
+****
+
+MATCH (p:Person {name: 'Elvis Presley'})-[]-(m:Movie)-[]-(a:Actor)
+RETURN count(*), count(DISTINCT m), count (DISTINCT a)
+
+
+
+
+
+
+

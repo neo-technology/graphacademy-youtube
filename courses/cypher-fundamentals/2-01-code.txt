@@ -1,0 +1,14 @@
+MERGE (p:Person {name: 'Michael Caine'})
+
+****
+
+MATCH (p:Person {name: 'Michael Caine'})
+RETURN p
+
+****
+
+MERGE (p:Person {name: 'Katie Holmes'})
+MERGE (m:Movie {title: 'The Dark Knight'})
+RETURN p, m
+
+

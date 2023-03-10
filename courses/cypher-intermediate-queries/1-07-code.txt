@@ -1,0 +1,46 @@
+MATCH (m:Movie)
+WHERE  m.title STARTS WITH 'Toy Story'
+RETURN m.title, m.released
+
+****
+
+MATCH (m:Movie)
+WHERE  m.title ENDS WITH ' I'
+RETURN m.title, m.released
+
+****
+
+MATCH (m:Movie)
+WHERE  m.title CONTAINS 'River'
+RETURN m.title, m.released
+
+****
+
+MATCH (p:Person)
+WHERE toLower(p.name) ENDS WITH 'demille'
+RETURN p.name
+
+****
+
+MATCH (p:Person)
+WHERE toUpper(p.name) ENDS WITH 'DEMILLE'
+RETURN p.name
+
+****
+
+MATCH (p:Person)
+WHERE toUpper(p.name) CONTAINS ' DE '
+RETURN p.name
+
+****
+
+EXPLAIN MATCH (m:Movie)
+WHERE  m.title STARTS WITH 'Toy Story'
+RETURN m.title, m.released
+
+****
+
+EXPLAIN MATCH (p:Person)
+WHERE toLower(p.name) ENDS WITH 'demille'
+RETURN p.name
+

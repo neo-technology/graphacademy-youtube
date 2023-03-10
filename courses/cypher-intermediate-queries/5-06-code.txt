@@ -1,0 +1,93 @@
+WITH  'Tom Hanks' AS theActor
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+WHERE p.name = theActor
+WITH m  LIMIT 5
+// possibly do more with the five m nodes
+RETURN m.title AS movies
+
+****
+
+WITH  'Tom Hanks' AS theActor
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+WHERE p.name = theActor
+WITH m  LIMIT 5
+MATCH (d:Person)-[:DIRECTED]->(m)
+RETURN d.name AS director,
+m.title AS movies
+
+****
+
+MATCH (:Movie {title: 'Toy Story'})-[:IN_GENRE]->(g:Genre)<-[:IN_GENRE]-(m)
+WHERE m.imdbRating IS NOT NULL
+WITH g.name AS genre,
+count(m) AS moviesInCommon,
+sum(m.imdbRating) AS total
+RETURN genre, moviesInCommon,
+total/moviesInCommon AS score
+ORDER By score DESC
+
+****
+
+MATCH (u:User {name: "Misty Williams"})-[r:RATED]->(:Movie)
+WITH u, avg(r.rating) AS average
+MATCH (u)-[r:RATED]->(m:Movie)
+WHERE r.rating > average
+RETURN average , m.title AS movie,
+r.rating as rating
+ORDER BY rating DESC
+
+****
+
+MATCH (m:Movie)--(a:Actor)
+WHERE m.title CONTAINS 'New York'
+WITH m, collect (a.name) AS actors,
+count(*) AS numActors
+RETURN m.title AS movieTitle, actors
+ORDER BY numActors DESC
+
+****
+
+MATCH (m:Movie)<-[:ACTED_IN]-(a:Actor)
+WHERE m.title CONTAINS 'New York'
+WITH m, collect (a.name) AS actors,
+count(*) AS numActors
+ORDER BY numActors DESC
+RETURN collect(m { .title, actors, numActors }) AS movies
+
+****
+
+PROFILE MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+WHERE p.born.year = 1980
+WITH p,
+collect(m.title) AS movies LIMIT 3
+RETURN p.name AS actor, movies
+
+****
+
+PROFILE MATCH (p:Actor)
+WHERE p.born.year = 1980
+WITH p  LIMIT 3
+MATCH (p)-[:ACTED_IN]->(m:Movie)
+WITH p, collect(m.title) AS movies
+RETURN p.name AS actor,  movies
+
+****
+
+MATCH (p:Actor)
+WHERE p.born.year = 1980
+WITH p  LIMIT 3
+MATCH (p)-[:ACTED_IN]->(m:Movie)-[:IN_GENRE]->(g:Genre)
+WITH p, collect(g.name) AS genres
+RETURN p.name AS actor, genres
+
+****
+
+MATCH (p:Actor)
+WHERE p.born.year = 1980
+WITH p  LIMIT 3
+MATCH (p)-[:ACTED_IN]->(m:Movie)-[:IN_GENRE]->(g:Genre)
+WITH p, collect(DISTINCT g.name) AS genres
+RETURN p.name AS actor, genres
+
+
+

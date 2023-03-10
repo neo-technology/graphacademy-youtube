@@ -1,0 +1,55 @@
+RETURN range(0,100,5)
+
+****
+
+UNWIND range(1, 100) AS i
+MERGE (:Order { number: i })
+// to undo this:
+// MATCH (o:Order) DETACH DELETE o
+
+****
+
+MATCH (a:Actor)--(m:Movie)
+WHERE m.year < 1910
+WITH a, count (m) AS NumMovies
+WITH NumMovies, [a.name, NumMovies] AS Stats ORDER BY NumMovies
+WITH collect(Stats) as AllStats
+return AllStats, reverse(AllStats)
+
+****
+
+MATCH (m:Movie)
+WHERE date(m.released).year = 2000
+WITH m ORDER BY date(m.released)
+WITH collect(m) AS Movies
+RETURN head(Movies).title AS FirstTitle, head(Movies).released AS FirstDate, size(tail(Movies)) AS SizeOfTail,
+tail(Movies)[-1].title AS LastTitle, tail(Movies)[-1].released AS LastDate
+
+****
+
+LOAD CSV WITH HEADERS FROM 'https://data.neo4j.com/importing/MovieDataUnclean.csv'
+AS row
+WITH
+row.title AS Title,
+row.languages AS Field,
+split(row.languages,"|") AS FieldList
+RETURN Title, Field, FieldList LIMIT 10
+
+****
+
+// Movies in all paths that begin with Elvis and end with an Actor that are 4 hops away from Elvis
+MATCH path = (p:Person {name: 'Elvis Presley'})-[*4]-(a:Actor)
+WITH nodes(path) AS n
+UNWIND n AS x
+WITH x WHERE x:Movie
+RETURN DISTINCT x.title
+
+****
+
+MATCH (m:Movie)
+WHERE m.title = 'Toy Story'
+MATCH path = (m)-[:ACTED_IN*1..6]-()
+WHERE last(nodes(path)).name IS NOT NULL
+RETURN last(nodes(path)).name AS LastNode, length(path) AS HopsAway order by length(path)
+
+

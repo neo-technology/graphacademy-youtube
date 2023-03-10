@@ -1,0 +1,67 @@
+MERGE (p:Person {name: 'Jane Doe'})
+
+****
+
+MATCH (p:Person)
+WHERE p.name = 'Jane Doe'
+DELETE p
+
+****
+
+MATCH (m:Movie {title: 'The Matrix'})
+MERGE (p:Person {name: 'Jane Doe'})
+MERGE (p)-[:ACTED_IN]->(m)
+RETURN p, m
+
+****
+
+MATCH (p:Person {name: 'Jane Doe'})-[r:ACTED_IN]->(m:Movie {title: 'The Matrix'})
+DELETE r
+RETURN p, m
+
+****
+
+MATCH (p:Person {name: 'Jane Doe'})
+MATCH (m:Movie {title: 'The Matrix'})
+MERGE (p)-[:ACTED_IN]->(m)
+RETURN p, m
+
+****
+
+MATCH (p:Person {name: 'Jane Doe'})
+DELETE p
+
+****
+
+MATCH (p:Person {name: 'Jane Doe'})
+DETACH DELETE p
+
+****
+
+MERGE (p:Person {name: 'Jane Doe'})
+RETURN p
+
+****
+
+MATCH (p:Person {name: 'Jane Doe'})
+SET p:Developer
+RETURN p
+
+****
+
+MATCH (p:Person {name: 'Jane Doe'})
+REMOVE p:Developer
+RETURN p
+
+****
+
+MATCH (p:Person {name: 'Jane Doe'})
+DETACH DELETE p
+
+****
+
+CALL db.labels()
+
+
+
+

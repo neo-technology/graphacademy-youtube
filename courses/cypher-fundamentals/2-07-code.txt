@@ -1,0 +1,32 @@
+// Find or create a person with this name
+MERGE (p:Person {name: 'McKenna Grace'})
+
+// Only set the `createdAt` property if the node is created during this query
+ON CREATE SET p.createdAt = datetime()
+
+// Only set the `updatedAt` property if the node was created previously
+ON MATCH SET p.updatedAt = datetime()
+
+// Set the `born` property regardless
+SET p.born = 2006
+
+RETURN p
+
+****
+
+// Find or create a person with this name
+MERGE (p:Person {name: 'Michael Caine'})
+
+// Find or create a movie with this title
+MERGE (m:Movie {title: 'The Cider House Rules'})
+
+// Find or create a relationship between the two nodes
+MERGE (p)-[:ACTED_IN]->(m)
+
+****
+
+MERGE (p:Person {name: 'Michael Caine'})-[:ACTED_IN]->(m:Movie {title: 'The Cider House Rules'})
+RETURN p, m
+
+
+

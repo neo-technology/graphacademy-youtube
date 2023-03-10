@@ -1,0 +1,95 @@
+CREATE FULLTEXT INDEX Movie_plot_ft IF NOT EXISTS
+FOR (x:Movie)
+ON EACH [x.plot]
+
+****
+
+SHOW INDEXES
+
+****
+
+CALL db.index.fulltext.queryNodes
+("Movie_plot_ft", "murder AND drugs")
+YIELD node
+RETURN node.title, node.plot
+
+****
+
+CREATE TEXT INDEX Movie_plot_text IF NOT EXISTS
+FOR (x:Movie)
+ON (x.plot)
+
+****
+
+PROFILE MATCH (m:Movie)
+WHERE m.plot CONTAINS "murder"
+AND m.plot CONTAINS "drugs"
+RETURN m.title,m.plot
+
+****
+
+CREATE TEXT INDEX Movie_plot_text
+IF NOT EXISTS
+FOR (x:Movie)
+ON (x.plot);
+
+CREATE TEXT INDEX Movie_title_text IF NOT EXISTS
+FOR (x:Movie)
+ON (x.text);
+
+CREATE TEXT INDEX Actor_bio_text IF NOT EXISTS
+FOR (x:Actor)
+ON (x.bio)
+
+****
+
+PROFILE MATCH (m:Movie)
+WHERE (m.plot CONTAINS "british"
+OR m.plot CONTAINS "British")
+AND (m.title CONTAINS "death"
+OR m.title CONTAINS "Death")
+RETURN m.name AS Name, m.bio AS Bio,
+m.title AS Title,  m.plot AS Plot
+
+UNION ALL
+
+MATCH (a:Actor)
+WHERE (a.bio CONTAINS "British"
+OR a.bio CONTAINS "british")
+AND (a.bio CONTAINS "actress"
+OR a.bio contains "Actress")
+RETURN a.name AS Name, a.bio AS Bio,
+a.title AS Title,  a.plot AS Plot
+
+****
+
+CREATE FULLTEXT INDEX Actor_bio_Movie_plot_title_ft IF NOT EXISTS
+FOR (x:Actor | Movie)
+ON EACH [x.bio, x.plot, x.title]
+
+****
+
+PROFILE CALL db.index.fulltext.queryNodes
+("Actor_bio_Movie_plot_title_ft",
+"(plot: british AND title: death)
+OR (bio: british  AND bio: actress)")
+YIELD node
+RETURN node.name AS Name, node.bio AS Bio,
+node.title AS Title,  node.plot AS Plot
+
+****
+
+CALL db.index.fulltext.queryNodes(
+     'Actor_bio_Movie_plot_title_ft',
+     'title: matrix reloaded')
+     YIELD node, score
+WITH score, node
+WHERE node:Movie
+RETURN node.title, score
+
+****
+
+DROP INDEX Actor_bio_Movie_plot_title_ft
+
+
+

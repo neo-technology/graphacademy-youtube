@@ -1,0 +1,15 @@
+MATCH (m:Movie)
+RETURN m.title AS MovieTitle,
+[x IN m.countries WHERE x CONTAINS 'USA' OR x CONTAINS 'Germany' | x]
+AS Country LIMIT 500
+
+****
+
+MATCH (m:Movie)-[:ACTED_IN]-(a:Actor)
+WHERE a.name = 'Tom Hanks'
+WITH m ORDER by m.released DESC
+WITH collect(m) AS Movies
+WITH [x IN Movies | x.title + ": " + toString(date().year - date(x.released).year + 1)] AS Summary
+RETURN Summary
+
+

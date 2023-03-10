@@ -1,0 +1,51 @@
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+WHERE p.name = $actorName
+RETURN m.released AS releaseDate,
+m.title AS title
+ORDER BY m.released DESC
+
+****
+
+:param actorName: 'Tom Hanks'
+
+****
+
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+WHERE p.name = $actorName
+RETURN m.released AS releaseDate,
+m.title AS title
+ORDER BY m.released DESC
+
+****
+
+:param number: 10
+
+****
+
+:param number=> 10
+
+****
+
+:params {actorName: 'Tom Cruise', movieName: 'Top Gun'}
+
+****
+
+:param number=> 10
+
+****
+
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+WHERE p.name = $actorName
+AND m.title = $movieName
+RETURN p, m
+
+****
+
+:params
+
+****
+
+:params {}
+
+
+

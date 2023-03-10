@@ -1,0 +1,19 @@
+WITH ["abc", false, 1, 1.5,null, datetime(), date(), LocalDateTime(), point({x: 2.3, y: 4.5})] AS MyList
+RETURN MyList, toStringList(MyList)
+
+****
+
+WITH ["abc", false, 1, 1.5,null, datetime(), date(), LocalDateTime(), point({x: 2.3, y: 4.5})] AS MyList
+RETURN MyList, toIntegerList(MyList)
+
+****
+
+WITH ["abc", false, 1, 1.5,null, datetime(), date(), LocalDateTime(), point({x: 2.3, y: 4.5})] AS MyList
+RETURN MyList, toFloatList(MyList)
+
+****
+
+WITH ["abc", false, 1, 1.5, 0, null, datetime(), date(), LocalDateTime(), point({x: 2.3, y: 4.5})] AS MyList
+RETURN MyList, toBooleanList(MyList)
+
+

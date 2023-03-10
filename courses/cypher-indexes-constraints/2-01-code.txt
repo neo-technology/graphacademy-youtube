@@ -1,0 +1,22 @@
+MATCH (p:Person)
+WHERE p.name = 'Austin Green'
+RETURN p
+
+****
+
+MERGE (p:Person {tmdbId: '135067'})
+ON CREATE
+SET p.name = 'Austin Green',
+    p.imdbId = '0337619',
+    p.url = 'https://themoviedb.org/person/135067'
+ON MATCH
+SET p.updated = date()
+RETURN p
+
+****
+
+CREATE (p:Person {tmdbId: '135067'})
+SET p.name = 'Austin Green',
+    p.imdbId = '0337619',
+    p.url = 'https://themoviedb.org/person/135067'
+RETURN p

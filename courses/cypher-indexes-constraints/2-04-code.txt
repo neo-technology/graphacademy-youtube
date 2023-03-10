@@ -1,0 +1,25 @@
+CREATE CONSTRAINT Person_name_exists IF NOT EXISTS
+FOR (x:Person)
+REQUIRE x.name IS NOT NULL
+
+****
+
+CREATE CONSTRAINT Movie_plot_exists IF NOT EXISTS
+FOR (x:Movie)
+REQUIRE x.plot IS NOT NULL
+
+****
+
+MERGE (x:Person {tmdbId:9999999})
+SET x.born = 2022
+
+****
+
+MATCH (x:Person {name: 'Tom Hanks'})
+SET x.name = null
+
+****
+
+SHOW CONSTRAINTS
+
+

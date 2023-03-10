@@ -1,0 +1,33 @@
+PROFILE MATCH (p:Person)
+WHERE p.name CONTAINS 'Robert'
+RETURN p.name
+
+****
+
+CREATE TEXT INDEX Person_name_text IF NOT EXISTS
+FOR (x:Person)
+ON (x.name)
+
+****
+
+SHOW INDEXES
+
+****
+
+PROFILE MATCH (p:Person)
+WHERE p.name CONTAINS 'Robert'
+RETURN p.name
+
+****
+
+PROFILE match (p:Person)
+WHERE p.bornIn IN ["France", "Los Angeles, California, USA","Berlin, Germany" ]
+RETURN p.name, p.bornIn
+
+
+
+
+
+
+
+

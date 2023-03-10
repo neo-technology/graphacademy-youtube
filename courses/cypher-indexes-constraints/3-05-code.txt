@@ -1,0 +1,31 @@
+PROFILE MATCH (m:Movie)
+WHERE m.year = 2000 AND m.runtime <= 60
+RETURN m.title, m.year, m.runtime
+
+****
+
+CREATE INDEX Movie_year_runtime IF NOT EXISTS
+FOR (x:Movie)
+ON (x.year, x.runtime)
+
+****
+
+PROFILE MATCH (m:Movie)
+WHERE m.year = 2000 AND m.runtime <= 60
+RETURN m.title, m.year, m.runtime
+
+****
+
+PROFILE MATCH (m:Movie)
+WHERE m.year IS NULL AND m.runtime IS NULL
+RETURN m.title, m.year, m.runtime
+
+****
+
+PROFILE MATCH (m:Movie)
+WHERE m.year = 2000
+RETURN m.title, m.year, m.runtime
+
+
+
+

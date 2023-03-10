@@ -1,0 +1,28 @@
+MATCH p = shortestPath((p1:Person)-[*]-(p2:Person))
+WHERE p1.name = "Eminem"
+AND p2.name = "Charlton Heston"
+RETURN  p
+
+****
+
+MATCH p = shortestPath((p1:Person)-[:ACTED_IN*]-(p2:Person))
+WHERE p1.name = "Eminem"
+AND p2.name = "Charlton Heston"
+RETURN  p
+
+****
+
+MATCH (p:Person {name: 'Eminem'})-[:ACTED_IN*2]-(others:Person)
+RETURN  others.name
+
+****
+
+MATCH (p:Person {name: 'Eminem'})-[:ACTED_IN*4]-(others:Person)
+RETURN  others.name
+
+****
+
+MATCH (p:Person {name: 'Eminem'})-[:ACTED_IN*1..4]-(others:Person)
+RETURN  others.name
+
+

@@ -1,0 +1,25 @@
+CREATE CONSTRAINT Movie_movieId_unique IF NOT EXISTS
+FOR (x:Movie)
+REQUIRE x.movieId IS UNIQUE
+
+****
+
+CREATE CONSTRAINT Movie_released_title_unique IF NOT EXISTS
+FOR (x:Movie)
+REQUIRE (x.released,x.title) IS UNIQUE
+
+****
+
+SHOW CONSTRAINTS
+
+****
+
+MERGE (m:Movie {movieId: '1'})
+
+****
+
+CREATE CONSTRAINT Movie_year_unique IF NOT EXISTS
+FOR (x:Movie)
+REQUIRE x.year IS UNIQUE
+
+

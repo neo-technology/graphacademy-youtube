@@ -1,0 +1,65 @@
+RETURN date(), datetime(), time()
+
+****
+
+MERGE (x:Test {id: 1})
+SET x.date = date(),
+    x.datetime = datetime(),
+    x.time = time()
+RETURN x
+
+****
+
+CALL apoc.meta.nodeTypeProperties()
+
+****
+
+MATCH (x:Test {id: 1})
+RETURN x.date.day, x.date.year,
+x.datetime.year, x.datetime.hour,
+x.datetime.minute
+
+****
+
+MATCH (x:Test {id: 1})
+SET x.date1 = date('2022-01-01'),
+    x.date2 = date('2022-01-15')
+RETURN x
+
+****
+
+MATCH (x:Test {id: 1})
+SET x.datetime1 = datetime('2022-01-04T10:05:20'),
+    x.datetime2 = datetime('2022-04-09T18:33:05')
+RETURN x
+
+****
+
+MATCH (x:Test {id: 1})
+RETURN duration.between(x.date1,x.date2)
+
+****
+
+MATCH (x:Test {id: 1})
+RETURN duration.inDays(x.datetime1,x.datetime2).days
+
+****
+
+MATCH (x:Test {id: 1})
+RETURN x.date1 + duration({months: 6})
+
+****
+
+MATCH (x:Test {id: 1})
+RETURN x.datetime as Datetime,
+apoc.temporal.format( x.datetime, 'HH:mm:ss.SSSS')
+AS formattedDateTime
+
+****
+
+MATCH (x:Test {id: 1})
+RETURN apoc.date.toISO8601(x.datetime.epochMillis, "ms")
+AS iso8601
+
+
+

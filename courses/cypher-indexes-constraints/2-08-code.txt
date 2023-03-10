@@ -1,0 +1,9 @@
+CREATE CONSTRAINT Movie_imdbId_nodekey IF NOT EXISTS
+FOR (x:Movie)
+REQUIRE x.imdbId IS NODE KEY
+
+****
+
+MERGE (x:Movie {title: "No Place Like Home", imdbId: "0113497", movieId: "9999999"})
+RETURN x
+

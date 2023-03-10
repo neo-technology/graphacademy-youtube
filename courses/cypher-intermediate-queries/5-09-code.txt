@@ -1,0 +1,17 @@
+MATCH (m:Movie)-[:ACTED_IN]-(a:Actor)
+WHERE a.name = 'Tom Hanks'
+UNWIND m.languages AS lang
+RETURN m.title AS movie,
+m.languages AS languages,
+lang AS language
+
+****
+
+MATCH (m:Movie)
+UNWIND m.languages AS lang
+WITH m, trim(lang) AS language
+// this automatically, makes the language distinct because it's a grouping key
+WITH language, collect(m.title) AS movies
+RETURN language, movies[0..10]
+
+

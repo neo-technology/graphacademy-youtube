@@ -1,0 +1,46 @@
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+WITH p, collect (m.title) AS MovieTitles
+WITH p, MovieTitles, size(MovieTitles) AS NumMovies
+WHERE NumMovies >= 20
+RETURN p.name AS Actor, NumMovies, MovieTitles ORDER BY NumMovies
+
+
+****
+
+MATCH (m:Movie)
+WHERE  date(m.released).year = 2000
+WITH m ORDER BY date(m.released)
+WITH collect(m) AS Movies
+WITH head(Movies) as First
+RETURN First.title AS FirstTitle, First.released AS FirstDate
+
+****
+
+MATCH (m:Movie) where date(m.released).year = 2000
+WITH m ORDER BY date(m.released)
+WITH collect(m) as Movies
+WITH last(Movies) as Last
+RETURN Last.title as LastTitle, Last.released AS LastDate
+
+****
+
+MATCH (m:Movie) WHERE date(m.released).year = 2000
+WITH collect(m.revenue) AS Revenues
+WITH Revenues, reduce(t=0, r IN Revenues | t + r) AS TotalRevenue
+RETURN TotalRevenue, size(Revenues) AS TotalMovies
+
+****
+
+MATCH (:User)-[r:RATED]->(m:Movie)
+WHERE m.title = 'Toy Story'
+WITH  collect(r.rating) AS Ratings
+WITH Ratings, reduce(Rating = 0, x IN Ratings | Rating + x) AS TotalRatings
+RETURN round(TotalRatings/size(Ratings),1)
+
+****
+
+WITH [[1,2,3], [4,5,6], [7,8,9]] AS StartingList
+RETURN reduce(Calc = [], r IN StartingList | Calc + r) AS FlattenedList
+
+
+

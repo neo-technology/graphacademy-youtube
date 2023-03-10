@@ -1,0 +1,19 @@
+MATCH (p:Person)
+WHERE p.born IS NOT NULL
+RETURN p
+
+****
+
+MATCH (m:Movie) WHERE m.year > 1999
+AND m.title CONTAINS "Toy"
+RETURN m.title, m.year, m.imdbRating
+
+****
+
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)<-[:DIRECTED]-(p2:Person)
+WHERE p.name = p2.name
+RETURN p
+
+
+
+

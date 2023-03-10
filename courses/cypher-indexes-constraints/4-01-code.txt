@@ -1,0 +1,10 @@
+CREATE TEXT INDEX Movie_plot_text IF NOT EXISTS FOR (x:Movie) ON (x.plot)
+
+****
+
+PROFILE MATCH (m:Movie)
+WHERE m.plot CONTAINS "murder"
+AND m.plot CONTAINS "drugs"
+RETURN m.title,m.plot
+
+

@@ -1,0 +1,36 @@
+PROFILE
+MATCH(m:Movie)
+WHERE m.year = 2015
+OPTIONAL MATCH (a:Person)-[:ACTED_IN]-(m)
+WITH m, collect(DISTINCT a.name) AS Actors
+OPTIONAL MATCH (m)-[:DIRECTED]-(d:Person)
+RETURN m.title AS Movie, Actors, collect (DISTINCT d.name) AS Directors
+
+****
+
+PROFILE
+MATCH (m:Movie)
+WHERE m.year = 2015
+RETURN m.title AS Movie,
+[(dir:Person)-[:DIRECTED]->(m) | dir.name] AS Directors,
+[(actor:Person)-[:ACTED_IN]->(m) | actor.name] AS Actors
+
+****
+
+MATCH (a:Person {name: 'Tom Hanks'})
+RETURN [(a)--(b:Movie)
+WHERE b.title CONTAINS "Toy" | b.title ]
+AS Movies
+
+****
+
+MATCH (a:Person {name: 'Tom Hanks'})
+RETURN [(a)--(b:Movie)
+WHERE b.title CONTAINS "Toy" | b.title + ": " + b.year]
+AS Movies
+
+
+
+
+
+

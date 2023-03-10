@@ -1,0 +1,55 @@
+PROFILE MATCH
+(p:Person)-[:ACTED_IN]->(m:Movie)<-[:DIRECTED]-(p2:Person)
+WHERE
+p.name CONTAINS 'John'
+AND
+p2.name CONTAINS 'George'
+RETURN p.name, p2.name,  m.title
+
+****
+
+PROFILE MATCH
+(p:Person)-[:ACTED_IN]->(m:Movie)<-[:DIRECTED]-(p2:Person)
+USING INDEX p:Person(name)
+WHERE
+p.name CONTAINS 'John'
+AND
+p2.name CONTAINS 'George'
+RETURN p.name, p2.name,  m.title
+
+****
+
+PROFILE MATCH
+(p:Person)-[:ACTED_IN]->(m:Movie)<-[:DIRECTED]-(p2:Person)
+USING INDEX p:Person(name)
+USING INDEX p2:Person(name)
+WHERE
+p.name CONTAINS 'John'
+AND
+p2.name CONTAINS 'George'
+RETURN p.name, p2.name,  m.title
+
+****
+
+PROFILE MATCH
+(u:User)-[r:RATED]->(m:Movie)
+WHERE
+u.name CONTAINS 'Johnson'
+AND
+r.rating = 5
+RETURN u.name, r.rating, m.title
+
+****
+
+PROFILE MATCH
+(u:User)-[r:RATED]->(m:Movie)
+USING INDEX r:RATED(rating)
+WHERE
+u.name CONTAINS 'Johnson'
+AND
+r.rating = 5
+RETURN u.name, r.rating, m.title
+
+
+
+

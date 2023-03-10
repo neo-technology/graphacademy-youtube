@@ -1,0 +1,24 @@
+MATCH (p:Person)
+WHERE p.name CONTAINS "Thomas"
+RETURN p AS person
+ORDER BY p.name ASC
+
+****
+
+MATCH (p:Person)
+WHERE p.name CONTAINS "Thomas"
+RETURN p { .* } AS person
+ORDER BY p.name ASC
+
+****
+
+MATCH (p:Person)
+WHERE p.name CONTAINS "Thomas"
+RETURN p { .name, .born } AS person
+ORDER BY p.name
+
+****
+
+MATCH (m:Movie)<-[:DIRECTED]-(d:Director)
+WHERE d.name = 'Woody Allen'
+RETURN m {.*, favorite: true} AS movie

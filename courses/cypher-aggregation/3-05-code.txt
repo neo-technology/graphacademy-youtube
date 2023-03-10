@@ -1,0 +1,33 @@
+UNWIND [[2],0,"a",2,[1]] AS x
+RETURN max(x)
+
+****
+
+UNWIND [["a"],"a","b",[1]] AS x
+RETURN max(x)
+
+****
+
+UNWIND [[1,2,12], [1,3,5]] AS x
+RETURN max(x)
+
+****
+
+PROFILE MATCH (m:Movie)
+WITH max(m.imdbVotes) as topVotes
+MATCH (m:Movie) where m.imdbVotes = topVotes
+RETURN m.title, m.imdbVotes
+
+****
+
+PROFILE MATCH (m:Movie)
+WHERE m.imdbVotes IS NOT NULL
+RETURN m.title, m.imdbVotes ORDER by m.imdbVotes DESC LIMIT 1
+
+****
+
+PROFILE MATCH (m:Movie)
+RETURN max(m.imdbRating)
+
+
+

@@ -1,0 +1,17 @@
+CREATE CONSTRAINT RATED_rating_exists IF NOT EXISTS
+FOR ()-[x:RATED]-()
+REQUIRE x.rating IS NOT NULL
+
+****
+
+CREATE CONSTRAINT ACTED_IN_role_exists IF NOT EXISTS
+FOR ()-[x:ACTED_IN]-()
+REQUIRE x.role IS NOT NULL
+
+****
+
+MATCH ()-[x:RATED]->()
+SET x.rating = null
+
+
+

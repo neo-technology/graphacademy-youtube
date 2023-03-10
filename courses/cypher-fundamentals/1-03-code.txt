@@ -1,0 +1,14 @@
+MATCH (p:Person {name: 'Tom Hanks'})
+RETURN p
+
+****
+
+MATCH (p:Person {name: 'Tom Hanks'})-[:ACTED_IN]->(m)
+RETURN m.title
+
+****
+
+MATCH (p:Person {name: 'Tom Hanks'})-[:ACTED_IN]->(m:Movie)
+RETURN m.title
+
+

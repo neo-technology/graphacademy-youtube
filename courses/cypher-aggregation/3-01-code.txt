@@ -1,0 +1,33 @@
+PROFILE MATCH (m:Movie)
+WHERE m.year = 2000
+RETURN sum(m.revenue) as GrossRevenue
+
+****
+
+WITH [1, 1.5,2] as Nums
+UNWIND Nums AS  x
+RETURN sum(x)
+
+****
+
+PROFILE MATCH (:Movie {title: 'Toy Story'})-[:IN_GENRE]->(g:Genre)<-[:IN_GENRE]-(m)
+WHERE m.imdbRating IS NOT NULL
+WITH g.name AS Genre,
+count(m) AS MoviesInCommon,
+sum(m.imdbRating) AS Total
+RETURN Genre, MoviesInCommon,
+Total/MoviesInCommon AS Score
+ORDER By Score DESC
+
+****
+
+MATCH (a:Actor)
+WHERE
+a.born IS NOT NULL
+AND a.name STARTS WITH 'Tom'
+WITH count(a) AS NumActors, collect(duration.between(date(a.born), date())) AS Ages
+UNWIND Ages AS x
+WITH NumActors, sum(x) AS TotalAges
+RETURN  TotalAges, TotalAges/NumActors
+
+

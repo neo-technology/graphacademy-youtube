@@ -1,0 +1,158 @@
+MATCH (a:Person)-[:ACTED_IN]->(m:Movie)
+WHERE a.name = 'Tom Hanks'
+RETURN a.name AS actorName,
+count(*) AS numMovies
+
+****
+
+MATCH (a:Person)-[:ACTED_IN]->(m:Movie)<-[:DIRECTED]-(d:Person)
+RETURN a.name AS actorName,
+d.name AS directorName,
+count(*) AS numMovies
+ORDER BY numMovies DESC
+
+****
+
+MATCH (a:Person)-[:ACTED_IN]->(m:Movie)<-[:DIRECTED]-(d:Person)
+RETURN a.name, d.name,
+count(*) AS numMovies
+ORDER BY numMovies DESC
+
+****
+
+MATCH (m:Movie)
+RETURN m.languages AS languages,
+m.countries AS countries
+LIMIT 10
+
+****
+
+MATCH (p:Person)
+RETURN p.name, [p.born, p.died] AS lifeTime
+LIMIT 10
+
+****
+
+MATCH (a:Person)-[:ACTED_IN]->(m:Movie)
+RETURN a.name AS actor,
+count(*) AS total,
+collect(m.title) AS movies
+ORDER BY total DESC LIMIT 10
+
+****
+
+MATCH (a:Person)-[:ACTED_IN]->(m:Movie)
+WHERE m.year = 1920
+RETURN  collect(m.title) AS movies,
+collect( a.name) AS actors
+
+****
+
+MATCH (a:Person)-[:ACTED_IN]->(m:Movie)
+WHERE m.year = 1920
+RETURN  collect( DISTINCT m.title) AS movies,
+collect( a.name) AS actors
+
+****
+
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+WHERE p.name ='Tom Cruise'
+RETURN collect(m) AS tomCruiseMovies
+
+****
+
+MATCH (a:Person)-[:ACTED_IN]->(m:Movie)
+RETURN m.title AS movie,
+collect(a.name)[0] AS castMember,
+size(collect(a.name)) as castSize
+
+****
+
+MATCH (a:Person)-[:ACTED_IN]->(m:Movie)
+RETURN m.title AS movie,
+collect(a.name)[2..] AS castMember,
+size(collect(a.name)) as castSize
+
+****
+
+MATCH (actor:Person)-[:ACTED_IN]->(m:Movie)<-[:DIRECTED]-(director:Person)
+RETURN actor.name, director.name,
+size(collect(m)) AS collaborations,
+collect(m.title) AS movies
+
+****
+
+//Query 1
+PROFILE MATCH (g:Genre)<-[:IN_GENRE]-(m)
+RETURN g.name AS genre,
+size(collect(m)) AS numMovies
+ORDER BY size(collect(m)) DESC
+
+****
+
+//Query 2
+PROFILE MATCH (g:Genre)<-[:IN_GENRE]-(m:Movie)
+RETURN g.name AS genre,
+count(m) AS numMovies
+ORDER BY count(m) DESC
+
+****
+
+MATCH (g:Genre)<-[:IN_GENRE]-(m:Movie)
+RETURN g.name AS genre,
+count(m) AS numMovies
+ORDER BY count(m) DESC LIMIT 1
+
+****
+
+MATCH (m:Movie)
+RETURN m.title as movie,
+[x IN m.countries WHERE x CONTAINS 'USA' OR x CONTAINS 'Germany']
+AS country LIMIT 500
+
+****
+
+MATCH (m:Movie)
+WHERE m.year = 2015
+RETURN m.title,
+[(dir:Person)-[:DIRECTED]->(m) | dir.name] AS directors,
+[(actor:Person)-[:ACTED_IN]->(m) | actor.name] AS actors
+
+****
+
+MATCH (a:Person {name: 'Tom Hanks'})
+RETURN [(a)-->(b:Movie)
+WHERE b.title CONTAINS "Toy" | b.title + ": " + b.year]
+AS movies
+
+****
+
+RETURN {Jan: 31, Feb: 28, Mar: 31, Apr: 30 ,
+May: 31, Jun: 30 , Jul: 31, Aug: 31, Sep: 30,
+Oct: 31, Nov: 30, Dec: 31}['Feb'] AS daysInFeb
+
+****
+
+RETURN {Jan: 31, Feb: 28, Mar: 31, Apr: 30 ,
+May: 31, Jun: 30 , Jul: 31, Aug: 31, Sep: 30,
+Oct: 31, Nov: 30, Dec: 31}.Feb AS daysInFeb
+
+****
+
+RETURN keys({Jan: 31, Feb: 28, Mar: 31, Apr: 30 ,
+May: 31, Jun: 30 ,Jul: 31, Aug: 31, Sep: 30,
+Oct: 31, Nov: 30, Dec: 31}) AS months
+
+****
+
+MATCH (m:Movie)
+RETURN m LIMIT 1
+
+****
+
+MATCH (m:Movie)
+WHERE m.title CONTAINS 'Matrix'
+RETURN m { .title, .released } AS movie
+
+
+

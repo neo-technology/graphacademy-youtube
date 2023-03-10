@@ -1,0 +1,44 @@
+CALL {
+   MATCH (m:Movie) WHERE m.year = 2000
+   RETURN m ORDER BY m.imdbRating DESC LIMIT 10
+}
+MATCH  (:User)-[r:RATED]->(m)
+RETURN m.title, avg(r.rating)
+
+****
+
+MATCH (m:Movie)
+CALL {
+    WITH m
+    MATCH (m)<-[r:RATED]-(u:User)
+     WHERE r.rating = 5
+    RETURN count(u) AS numReviews
+}
+RETURN m.title, numReviews
+ORDER BY numReviews DESC
+
+****
+
+MATCH (m:Movie) WHERE m.year = 2000
+RETURN {type:"movies", theMovies: collect(m.title)} AS data
+UNION ALL
+MATCH (a:Actor) WHERE a.born.year > 2000
+RETURN { type:"actors", theActors: collect(DISTINCT a.name)} AS data
+
+****
+
+MATCH (p:Person)
+WITH p LIMIT 100
+CALL {
+  WITH p
+  OPTIONAL MATCH (p)-[:ACTED_IN]->(m:Movie)
+  RETURN m.title + ": " + "Actor" AS work
+UNION
+  WITH p
+  OPTIONAL MATCH (p)-[:DIRECTED]->(m:Movie)
+  RETURN m.title+ ": " +  "Director" AS work
+}
+RETURN p.name, collect(work)
+
+
+
