@@ -1,0 +1,32 @@
+SHOW CONSTRAINTS
+
+****
+
+SHOW INDEXES
+
+****
+
+PROFILE MATCH (m:Movie)
+WHERE m.title STARTS WITH "Toy"
+RETURN m.title
+
+****
+
+CREATE INDEX Movie_title IF NOT EXISTS
+FOR (x:Movie)
+ON (x.title)
+
+****
+
+PROFILE MATCH (m:Movie)
+WHERE m.title STARTS WITH "Toy"
+RETURN m.title
+
+****
+
+PROFILE MATCH (m:Movie)
+WHERE toLower(m.title) STARTS WITH "toy"
+RETURN m.title
+
+****
+

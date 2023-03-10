@@ -1,0 +1,25 @@
+MATCH (p:Person)
+RETURN p
+
+****
+
+MATCH (p:Person {name: 'Tom Hanks'})
+RETURN p
+
+****
+
+MATCH (p:Person {name: 'Tom Hanks'})
+RETURN  p.born
+
+****
+
+MATCH (p:Person)
+WHERE p.name = 'Tom Hanks'
+RETURN p.name
+
+****
+
+MATCH (p:Person)
+WHERE p.name = 'Tom Hanks' OR p.name = 'Rita Wilson'
+RETURN p.name, p.born
+
