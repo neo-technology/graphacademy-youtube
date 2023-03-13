@@ -7,7 +7,7 @@ For any video that will have code files, you can add this information when the v
 
 1. Select Cards
 2. Add a card
-3. Enter the length of the card to be the number of even minutes for the video.
+3. Enter the length of the card to be the number of minutes and seconds for the video.
 4. Paste the link (raw.github URL).
 5. Add OpenCode.png as the image.
 6. Enter "." for the Card title.
