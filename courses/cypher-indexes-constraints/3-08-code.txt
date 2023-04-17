@@ -1,0 +1,42 @@
+PROFILE MATCH (p:Person)
+WHERE p.name CONTAINS 'Diane Keaton'
+WITH p.bornLocation as loc
+MATCH (p2:Person)
+WHERE p2.bornLocation = loc
+RETURN p2.name, p2.bornIn, p2.bornLocation
+
+****
+
+PROFILE MATCH (p:Person)
+WHERE p.bornLocation = point({srid:4326, x:-118.4166991, y:34.2013928})
+RETURN p.name, p.bornIn, p.bornLocation
+
+****
+
+CREATE POINT INDEX Person_bornLocation_point IF NOT EXISTS
+FOR (x:Person)
+ON (x.bornLocation)
+
+****
+
+SHOW INDEXES
+
+****
+
+PROFILE MATCH (p:Person)
+WHERE p.bornLocation = point({srid:4326, x:-118.4166991, y:34.2013928})
+RETURN p.name, p.bornIn, p.bornLocation
+
+****
+
+PROFILE MATCH (p:Person)
+WHERE point.distance(p.bornLocation,point({srid:4326, x:-118.4166991, y:34.2013928})) < 50000
+RETURN p.name, p.bornIn, p.bornLocation
+
+
+
+
+
+
+
+
